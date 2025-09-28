@@ -869,4 +869,111 @@ public class ProductServiceTest {
         // Assert
         assertEquals("price", violations_invalid.iterator().next().getPropertyPath().toString());
     }
+
+    @Test
+    public void testQuantityInStockEquivalencePartitionTitle() {
+        /*
+         * Valid Cases (TC37, TC38)
+         */
+        //Valid case quantityInStock == 0 int - TC37
+        Product productWithValidQuantityMin = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            0,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidQuantityMin);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidQuantityMin)).thenReturn(productWithValidQuantityMin);
+        Product savedProduct = productService.save(productWithValidQuantityMin);
+        assertEquals(productWithValidQuantityMin, savedProduct);
+
+        //Valid case quantityInStock == 1 int - TC38
+        Product productWithValidQuantityMinOne = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidQuantityMinOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidQuantityMinOne)).thenReturn(productWithValidQuantityMinOne);
+        savedProduct = productService.save(productWithValidQuantityMinOne);
+        assertEquals(productWithValidQuantityMinOne, savedProduct);
+
+        /*
+         * Invalid Cases (TC39, TC40, TC41)
+         */
+        // Invalid case quantityInStock == null int - TC39
+        Product productWithInvalidQuantityNull = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            null,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidQuantityNull);
+        // Assert
+        assertEquals("quantityInStock", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case quantityInStock == -1 int - TC40
+        Product productWithInvalidQuantityNegative = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            -1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidQuantityNegative);
+        // Assert
+        assertEquals("quantityInStock", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case quantityInStock == -1 int - TC40
+        Product productWithInvalidQuantityFloat = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1.5,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidQuantityFloat);
+        // Assert
+        assertEquals("quantityInStock", violations_invalid.iterator().next().getPropertyPath().toString());
+    }
 }
