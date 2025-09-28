@@ -72,11 +72,14 @@ public class ProductServiceTest {
         return product;
     }
 
-    // BEGIN TEST CASES - (with example for Titile)
     @Test
     public void testTitleEquivalencePartitionTitle() {
-        //Valid case Title == 3 char
-        Product productWithValidTitle = createProductSample(
+        /*
+         * Valid Cases (TC1, TC2, TC3, TC4)
+         */
+
+        //Valid case Product Title == 3 char - TC1
+        Product productWithValidTitleMin = createProductSample(
             1L,
             "NES",
             null,
@@ -93,11 +96,36 @@ public class ProductServiceTest {
         // Assert
         System.err.println(violations_valid);
         assertTrue(violations_valid.isEmpty());
-        when(productRepository.save(productWithValidTitle)).thenReturn(productWithValidTitle);
-        Product savedProduct = productService.save(productWithValidTitle);
-        assertEquals(productWithValidTitle, savedProduct);
+        when(productRepository.save(productWithValidTitleMin)).thenReturn(productWithValidTitleMin);
+        Product savedProductMin = productService.save(productWithValidTitleMin);
+        assertEquals(productWithValidTitleMin, savedProductMin);
 
-        //Invalid case Title < 3 char
+        //Valid case Product Title == 4 char - TC2
+        Product productWithValidTitleMinOne = createProductSample(
+            1L,
+            "SNES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidTitleMinOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidTitleMinOne)).thenReturn(productWithValidTitleMinOne);
+        Product savedProduct = productService.save(productWithValidTitleMinOne);
+        assertEquals(productWithValidTitleMinOne, savedProduct);
+
+        /*
+         * Invalid Cases (TC5, TC6, TC7)
+         */
+
         Product productWithTwoCharTitle = createProductSample(
             1L,
             "NE",
