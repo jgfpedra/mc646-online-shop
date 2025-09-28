@@ -68,13 +68,15 @@ public class ProductServiceTest {
 
         return product;
     }
-
-    // Title
-
+  
     @Test
     public void testTitleEquivalencePartitionTitle() {
-        //Valid case Title == 3 char
-        Product productWithValidTitle = createProductSample(
+        /*
+         * Valid Cases (TC1, TC2, TC3, TC4)
+         */
+
+        //Valid case Product Title == 3 char - TC1
+        Product productWithValidTitleMin = createProductSample(
             1L,
             "NES",
             null,
@@ -87,15 +89,86 @@ public class ProductServiceTest {
             null,
             Instant.now()
         );
-        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidTitle);
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidTitleMin);
         // Assert
         System.err.println(violations_valid);
         assertTrue(violations_valid.isEmpty());
-        when(productRepository.save(productWithValidTitle)).thenReturn(productWithValidTitle);
-        Product savedProduct = productService.save(productWithValidTitle);
-        assertEquals(productWithValidTitle, savedProduct);
+        when(productRepository.save(productWithValidTitleMin)).thenReturn(productWithValidTitleMin);
+        Product savedProduct = productService.save(productWithValidTitleMin);
+        assertEquals(productWithValidTitleMin, savedProductMin);
 
-        //Invalid case Title < 3 char
+        //Valid case Product Title == 4 char - TC2
+        Product productWithValidTitleMinOne = createProductSample(
+            1L,
+            "SNES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidTitleMinOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidTitleMinOne)).thenReturn(productWithValidTitleMinOne);
+        savedProduct = productService.save(productWithValidTitleMinOne);
+        assertEquals(productWithValidTitleMinOne, savedProduct);
+
+        //Valid case Product Title == 99 char - TC3
+        String title_tc3 = "A".repeat(99);
+        Product productWithValidTitleMaxOne = createProductSample(
+            1L,
+            title_tc3,
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidTitleMaxOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidTitleMaxOne)).thenReturn(productWithValidTitleMaxOne);
+        savedProduct = productService.save(productWithValidTitleMaxOne);
+        assertEquals(productWithValidTitleMaxOne, savedProduct);
+
+        //Valid case Product Title == 100 char - TC4
+        String title_tc4 = "A".repeat(100);
+        Product productWithValidTitleMax = createProductSample(
+            1L,
+            title_tc4,
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidTitleMax);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidTitleMax)).thenReturn(productWithValidTitleMax);
+        savedProduct = productService.save(productWithValidTitleMax);
+        assertEquals(productWithValidTitleMax, savedProduct);
+
+        /*
+         * Invalid Cases (TC5, TC6, TC7)
+         */
+        // Invalid case Product Title = 2 - TC5
         Product productWithTwoCharTitle = createProductSample(
             1L,
             "NE",
@@ -110,6 +183,43 @@ public class ProductServiceTest {
             Instant.now()
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithTwoCharTitle);
+        // Assert
+        assertEquals("title", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case Product Title = 101 - TC6
+        String title_tc6 = "A".repeat(101);
+        Product productWithOneHundredOneCharTitle = createProductSample(
+            1L,
+            title_tc6,
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithOneHundredOneCharTitle);
+        // Assert
+        assertEquals("title", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case Product Title = null - TC7
+        Product productWithNullCharTitle = createProductSample(
+            1L,
+            null,
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithNullCharTitle);
         // Assert
         assertEquals("title", violations_invalid.iterator().next().getPropertyPath().toString());
     }
