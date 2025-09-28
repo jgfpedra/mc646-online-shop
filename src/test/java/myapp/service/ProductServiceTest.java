@@ -1109,4 +1109,115 @@ public class ProductServiceTest {
         // Assert
         assertEquals("status", violations_invalid.iterator().next().getPropertyPath().toString());
     }
+
+    @Test
+    public void testWeightEquivalencePartitionTitle() {
+        /*
+         * Valid Cases (TC48, TC49, TC50)
+         */
+        //Valid case weight == null Double - TC48
+        Product productWithValidWeightNull = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidWeightNull);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidWeightNull)).thenReturn(productWithValidWeightNull);
+        Product savedProduct = productService.save(productWithValidWeightNull);
+        assertEquals(productWithValidWeightNull, savedProduct);
+
+        //Valid case weight == 0.00 Double - TC49
+        Product productWithValidWeightMin = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            0.00,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidWeightMin);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidWeightMin)).thenReturn(productWithValidWeightMin);
+        savedProduct = productService.save(productWithValidWeightMin);
+        assertEquals(productWithValidWeightMin, savedProduct);
+
+        //Valid case weight == 0.01 Double - TC50
+        Product productWithValidWeightMinOne = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            0.01,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidWeightMinOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidWeightMinOne)).thenReturn(productWithValidWeightMinOne);
+        savedProduct = productService.save(productWithValidWeightMinOne);
+        assertEquals(productWithValidWeightMinOne, savedProduct);
+
+        /*
+         * Invalid Cases (TC51, TC52)
+         */
+        // Invalid case quantityInStock == -0.01 Double - TC51
+        Product productWithInvalidWeightNegative = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            -0.01,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidWeightNegative);
+        // Assert
+        assertEquals("weight", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case quantityInStock == "10 gramas" - TC52
+        Product productWithInvalidWeightString = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            "10 gramas",
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithInvalidWeightString);
+        // Assert
+        assertEquals("weight", violations_invalid.iterator().next().getPropertyPath().toString());
+    }
 }
