@@ -1220,4 +1220,144 @@ public class ProductServiceTest {
         // Assert
         assertEquals("weight", violations_invalid.iterator().next().getPropertyPath().toString());
     }
+
+    @Test
+    public void testDimensionsEquivalencePartitionTitle() {
+        /*
+         * Valid Cases (TC53, TC54, TC55, TC56, TC57)
+         */
+        //Valid case dimensions == null String - TC53
+        Product productWithValidDimensionsNull = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidDimensionsNull);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidDimensionsNull)).thenReturn(productWithValidDimensionsNull);
+        Product savedProduct = productService.save(productWithValidDimensionsNull);
+        assertEquals(productWithValidDimensionsNull, savedProduct);
+
+        //Valid case dimensions == 1 char String - TC54
+        Product productWithValidDimensionsMin = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            "A",
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidDimensionsMin);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidDimensionsMin)).thenReturn(productWithValidDimensionsMin);
+        savedProduct = productService.save(productWithValidDimensionsMin);
+        assertEquals(productWithValidDimensionsMin, savedProduct);
+
+        //Valid case dimensions == 1 char String - TC55
+        Product productWithValidDimensionsMinOne = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            "AA",
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidDimensionsMinOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidDimensionsMinOne)).thenReturn(productWithValidDimensionsMinOne);
+        savedProduct = productService.save(productWithValidDimensionsMinOne);
+        assertEquals(productWithValidDimensionsMinOne, savedProduct);
+
+        //Valid case dimensions == 49 char String - TC56
+        String dimensionsTC55 = "A".repeat(49);
+        Product productWithValidDimensionsMaxOne = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            dimensionsTC55,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidDimensionsMinOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidDimensionsMinOne)).thenReturn(productWithValidDimensionsMinOne);
+        savedProduct = productService.save(productWithValidDimensionsMinOne);
+        assertEquals(productWithValidDimensionsMinOne, savedProduct);
+
+        //Valid case dimensions == 50 char String - TC57
+        String dimensionsTC56 = "A".repeat(50);
+        Product productWithValidDimensionsMax = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            dimensionsTC56,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidDimensionsMax);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidDimensionsMax)).thenReturn(productWithValidDimensionsMax);
+        savedProduct = productService.save(productWithValidDimensionsMax);
+        assertEquals(productWithValidDimensionsMax, savedProduct);
+
+        /*
+         * Invalid Cases (TC58)
+         */
+        // Invalid case dimensions == 51 char String - TC58
+        String dimensionsTC58 = "A".repeat(51);
+        Product productWithInvalidDimensionsMax = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            dimensionsTC58,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidDimensionsMax);
+        // Assert
+        assertEquals("dimensions", violations_invalid.iterator().next().getPropertyPath().toString());
+    }
 }
