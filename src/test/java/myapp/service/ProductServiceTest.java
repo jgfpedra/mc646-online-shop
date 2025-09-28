@@ -673,4 +673,200 @@ public class ProductServiceTest {
         // Assert
         assertEquals("rating", violations_invalid.iterator().next().getPropertyPath().toString());
     }
+
+    @Test
+    public void testPriceEquivalencePartitionTitle() {
+        /*
+         * Valid Cases (TC28, TC29, TC30, TC31)
+         */
+
+        //Valid case price == 1.00 BigDecimal - TC28
+        BigDecimal priceTC28 = new BigDecimal("1.00");
+        Product productWithValidPriceMin = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            priceTC28,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidPriceMin);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidPriceMin)).thenReturn(productWithValidPriceMin);
+        Product savedProduct = productService.save(productWithValidPriceMin);
+        assertEquals(productWithValidPriceMin, savedProduct);
+
+        //Valid case price == 1.01 BigDecimal - TC29
+        BigDecimal priceTC29 = new BigDecimal("1.01");
+        Product productWithValidPriceMinOne = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            priceTC29,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidPriceMinOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidPriceMinOne)).thenReturn(productWithValidPriceMinOne);
+        savedProduct = productService.save(productWithValidPriceMinOne);
+        assertEquals(productWithValidPriceMinOne, savedProduct);
+
+        //Valid case price == 9998.99 BigDecimal - TC30
+        BigDecimal priceTC30 = new BigDecimal("9998.99");
+        Product productWithValidPriceMaxOne = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            priceTC30,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidPriceMaxOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidPriceMaxOne)).thenReturn(productWithValidPriceMaxOne);
+        savedProduct = productService.save(productWithValidPriceMaxOne);
+        assertEquals(productWithValidPriceMaxOne, savedProduct);
+
+        //Valid case price == 9999.00 BigDecimal - TC31
+        BigDecimal priceTC30 = new BigDecimal("9999.00");
+        Product productWithValidPriceMax = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            priceTC31,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidPriceMax);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidPriceMax)).thenReturn(productWithValidPriceMax);
+        savedProduct = productService.save(productWithValidPriceMax);
+        assertEquals(productWithValidPriceMax, savedProduct);
+
+        /*
+         * Invalid Cases (TC32, TC33, TC34, TC35, TC36)
+         */
+        // Invalid case price == null BigDecimal - TC32
+        Product productWithInvalidPriceNull = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            null,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidPriceNull);
+        // Assert
+        assertEquals("price", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case price == 0.99 BigDecimal - TC33
+        BigDecimal priceTC33 = BigDecimal("0.99");
+        Product productWithInvalidPriceMin = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            priceTC33,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithInvalidPriceMin);
+        // Assert
+        assertEquals("price", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case price  == 9999.01 BigDecimal - TC34
+        BigDecimal priceTC34 = BigDecimal("9999.01");
+        Product productWithInvalidPriceMax = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            priceTC34,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithInvalidPriceMax);
+        // Assert
+        assertEquals("price", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case price == -1 BigDecimal - TC35
+        BigDecimal priceTC35 = BigDecimal("-1");
+        Product productWithInvalidPriceNegative = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            priceTC35,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithInvalidPriceNegative);
+        // Assert
+        assertEquals("price", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case price == "oito" BigDecimal - TC36
+        BigDecimal priceTC36 = BigDecimal("oito");
+        Product productWithInvalidPriceString = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            priceTC36,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithInvalidPriceString);
+        // Assert
+        assertEquals("price", violations_invalid.iterator().next().getPropertyPath().toString());
+    }
 }
