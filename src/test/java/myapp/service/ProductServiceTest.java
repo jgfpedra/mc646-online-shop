@@ -98,7 +98,7 @@ public class ProductServiceTest {
         assertTrue(violations_valid.isEmpty());
         when(productRepository.save(productWithValidTitleMin)).thenReturn(productWithValidTitleMin);
         Product savedProduct = productService.save(productWithValidTitleMin);
-        assertEquals(productWithValidTitleMin, savedProductMin);
+        assertEquals(productWithValidTitleMin, savedProduct);
 
         //Valid case Product Title == 4 char - TC2
         Product productWithValidTitleMinOne = createProductSample(
@@ -782,7 +782,7 @@ public class ProductServiceTest {
         assertEquals(productWithValidPriceMaxOne, savedProduct);
 
         //Valid case price == 9999.00 BigDecimal - TC31
-        BigDecimal priceTC30 = new BigDecimal("9999.00");
+        BigDecimal priceTC31 = new BigDecimal("9999.00");
         Product productWithValidPriceMax = createProductSample(
             1L,
             "NES",
@@ -996,7 +996,7 @@ public class ProductServiceTest {
             Instant.now(),
             null
         );
-        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidQuantityNegative);
+        violations_invalid = validator.validate(productWithInvalidQuantityNegative);
         // Assert
         assertEquals("quantityInStock", violations_invalid.iterator().next().getPropertyPath().toString());
 
@@ -1015,7 +1015,7 @@ public class ProductServiceTest {
             Instant.now(),
             null
         );
-        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidQuantityFloat);
+        violations_invalid = validator.validate(productWithInvalidQuantityFloat);
         // Assert
         assertEquals("quantityInStock", violations_invalid.iterator().next().getPropertyPath().toString());
     }
@@ -1063,7 +1063,7 @@ public class ProductServiceTest {
             Instant.now(),
             null
         );
-        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidStatusPreOrder);
+        violations_valid = validator.validate(productWithValidStatusPreOrder);
         // Assert
         System.err.println(violations_valid);
         assertTrue(violations_valid.isEmpty());
@@ -1086,7 +1086,7 @@ public class ProductServiceTest {
             Instant.now(),
             null
         );
-        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidStatusDiscontinued);
+        violations_valid = validator.validate(productWithValidStatusDiscontinued);
         // Assert
         System.err.println(violations_valid);
         assertTrue(violations_valid.isEmpty());
@@ -1109,7 +1109,7 @@ public class ProductServiceTest {
             Instant.now(),
             null
         );
-        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidStatusOutOfStock);
+        violations_valid = validator.validate(productWithValidStatusOutOfStock);
         // Assert
         System.err.println(violations_valid);
         assertTrue(violations_valid.isEmpty());
@@ -1474,7 +1474,7 @@ public class ProductServiceTest {
         assertEquals("dateAdded", violations_invalid.iterator().next().getPropertyPath().toString());
 
         //Invalid case dateAdded == 30/02/2025 Instant Instant - TC61
-        LocalDate date = LocalDate.of(2025, 2, 30);
+        date = LocalDate.of(2025, 2, 30);
         Instant instantDateTC61 = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
         Product productWithInvalidDateAddedWrong = createProductSample(
             1L,
@@ -1553,7 +1553,7 @@ public class ProductServiceTest {
          * Invalid Cases (TC64)
          */
         //Invalid case dateAdded == 10/13/2025 Instant - TC64
-        LocalDate date = LocalDate.of(2025, 13, 10);
+        date = LocalDate.of(2025, 13, 10);
         Instant instantDateTC64 = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
         Product productWithInvalidModifiedDateWrong = createProductSample(
             1L,
