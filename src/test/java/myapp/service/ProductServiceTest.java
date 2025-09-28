@@ -958,7 +958,7 @@ public class ProductServiceTest {
         // Assert
         assertEquals("quantityInStock", violations_invalid.iterator().next().getPropertyPath().toString());
 
-        // Invalid case quantityInStock == -1 int - TC40
+        // Invalid case quantityInStock == -1 int - TC41
         Product productWithInvalidQuantityFloat = createProductSample(
             1L,
             "NES",
@@ -975,5 +975,138 @@ public class ProductServiceTest {
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidQuantityFloat);
         // Assert
         assertEquals("quantityInStock", violations_invalid.iterator().next().getPropertyPath().toString());
+    }
+
+    @Test
+    public void testStatusEquivalencePartitionTitle() {
+        /*
+         * Valid Cases (TC42, TC43, TC44, TC45)
+         */
+        //Valid case status == ProductStatus.IN_STOCK ProductStatus - TC42
+        Product productWithValidStatusInStock = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidStatusInStock);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidStatusInStock)).thenReturn(productWithValidStatusInStock);
+        Product savedProduct = productService.save(productWithValidStatusInStock);
+        assertEquals(productWithValidStatusInStock, savedProduct);
+
+        //Valid case status == ProductStatus.OUT_OF_STOCK ProductStatus - TC43
+        Product productWithValidStatusPreOrder = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.PREORDER,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidStatusPreOrder);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidStatusPreOrder)).thenReturn(productWithValidStatusPreOrder);
+        savedProduct = productService.save(productWithValidStatusPreOrder);
+        assertEquals(productWithValidStatusPreOrder, savedProduct);
+
+        //Valid case status == ProductStatus.DISCONTINUED ProductStatus - TC44
+        Product productWithValidStatusDiscontinued = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.DISCONTINUED,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidStatusDiscontinued);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidStatusDiscontinued)).thenReturn(productWithValidStatusDiscontinued);
+        savedProduct = productService.save(productWithValidStatusDiscontinued);
+        assertEquals(productWithValidStatusDiscontinued, savedProduct);
+
+        //Valid case status == ProductStatus.OUT_OF_STOCK ProductStatus - TC45
+        Product productWithValidStatusOutOfStock = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.OUT_OF_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidStatusOutOfStock);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidStatusOutOfStock)).thenReturn(productWithValidStatusOutOfStock);
+        savedProduct = productService.save(productWithValidStatusOutOfStock);
+        assertEquals(productWithValidStatusOutOfStock, savedProduct);
+
+        /*
+         * Invalid Cases (TC46, TC47)
+         */
+        // Invalid case status == null ProductStatus - TC46
+        Product productWithInvalidStatusNull = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            null,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidStatusNull);
+        // Assert
+        assertEquals("status", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case status == ProductStatus.AVAILABLE ProductStatus - TC47
+        Product productWithInvalidStatusAvailable = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.AVAILABLE,
+            null,
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithInvalidStatusAvailable);
+        // Assert
+        assertEquals("status", violations_invalid.iterator().next().getPropertyPath().toString());
     }
 }
