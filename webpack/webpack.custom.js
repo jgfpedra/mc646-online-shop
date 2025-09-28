@@ -16,9 +16,8 @@ module.exports = async (config, options, targetOptions) => {
     config.plugins.push(
       new ESLintPlugin({
         configType: 'flat',
-        extensions: [ 'js', 'html'],
+        extensions: ['js', 'html'],
       }),
-     
     );
   }
 
