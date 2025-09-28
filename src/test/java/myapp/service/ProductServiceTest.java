@@ -72,6 +72,8 @@ public class ProductServiceTest {
         return product;
     }
 
+    // Title
+
     @Test
     public void testTitleEquivalencePartitionTitle() {
         /*
@@ -225,5 +227,148 @@ public class ProductServiceTest {
         violations_invalid = validator.validate(productWithNullCharTitle);
         // Assert
         assertEquals("title", violations_invalid.iterator().next().getPropertyPath().toString());
+    }
+
+    // KeyWord
+
+    @Test
+    public void testKeyWordEquivalencePartitionTitle() {
+        /*
+         * Valid Cases (TC8, TC9, TC10, TC11, TC12)
+         */
+
+        //Valid case Key Word == null char - TC8
+        Product productWithValidKeyWordNull = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidKeyWordNull);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidKeyWordNull)).thenReturn(productWithValidKeyWordNull);
+        Product savedProduct = productService.save(productWithValidKeyWordNull);
+        assertEquals(productWithValidKeyWordNull, savedProductMin);
+
+        //Valid case Key Word == 1 char - TC9
+        Product productWithValidKeyWordMin = createProductSample(
+            1L,
+            "NES",
+            "a",
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidKeyWordMin);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidKeyWordMin)).thenReturn(productWithValidKeyWordMin);
+        savedProduct = productService.save(productWithValidKeyWordMin);
+        assertEquals(productWithValidKeyWordMin, savedProduct);
+
+        //Valid case Key Word == 2 char - TC10
+        Product productWithValidKeyWordMinOne = createProductSample(
+            1L,
+            "NES",
+            "aa",
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidKeyWordMinOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidKeyWordMinOne)).thenReturn(productWithValidKeyWordMinOne);
+        savedProduct = productService.save(productWithValidKeyWordMinOne);
+        assertEquals(productWithValidKeyWordMinOne, savedProduct);
+
+        //Valid case Key Word == 199 char - TC11
+        String keywordTC11 = "A".reapeat(199);
+        Product productWithValidKeyWordMaxOne = createProductSample(
+            1L,
+            "NES",
+            keywordTC11,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidKeyWordMaxOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidKeyWordMaxOne)).thenReturn(productWithValidKeyWordMaxOne);
+        savedProduct = productService.save(productWithValidKeyWordMaxOne);
+        assertEquals(productWithValidKeyWordMaxOne, savedProduct);
+
+        //Valid case Key Word == 200 char - TC12
+        String keywordTC12 = "A".reapeat(200);
+        Product productWithValidKeyWordMaxOne = createProductSample(
+            1L,
+            "NES",
+            keywordTC12,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidKeyWordMaxOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidKeyWordMaxOne)).thenReturn(productWithValidKeyWordMaxOne);
+        savedProduct = productService.save(productWithValidKeyWordMaxOne);
+        assertEquals(productWithValidKeyWordMaxOne, savedProduct);
+
+        /*
+         * Invalid Cases (TC13)
+         */
+        // Invalid case Key Word = 201 - TC13
+        String keywordTC13 = "A".repeat(201);
+        Product productWithInvalidKeyWordMax = createProductSample(
+            1L,
+            "NE",
+            keywordTC13,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidKeyWordMax);
+        // Assert
+        assertEquals("keywords", violations_invalid.iterator().next().getPropertyPath().toString());
     }
 }
