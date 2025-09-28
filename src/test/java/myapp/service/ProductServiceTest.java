@@ -455,7 +455,7 @@ public class ProductServiceTest {
         // Assert
         System.err.println(violations_valid);
         assertTrue(violations_valid.isEmpty());
-        when(productRepository.save(productWithValidDescriptionMax)).thenReturn(productWithValidDescriptionMaxOne);
+        when(productRepository.save(productWithValidDescriptionMaxOne)).thenReturn(productWithValidDescriptionMaxOne);
         savedProduct = productService.save(productWithValidDescriptionMaxOne);
         assertEquals(productWithValidDescriptionMaxOne, savedProduct);
 
@@ -948,7 +948,7 @@ public class ProductServiceTest {
         Product savedProduct = productService.save(productWithValidStatusInStock);
         assertEquals(productWithValidStatusInStock, savedProduct);
 
-        //Valid case status == ProductStatus.OUT_OF_STOCK ProductStatus - TC43
+        //Valid case status == ProductStatus.PREORDER ProductStatus - TC43
         Product productWithValidStatusPreOrder = createProductSample(
             1L,
             "NES",
