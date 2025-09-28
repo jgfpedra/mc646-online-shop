@@ -68,7 +68,7 @@ public class ProductServiceTest {
 
         return product;
     }
-  
+
     @Test
     public void testTitleEquivalencePartitionTitle() {
         /*
@@ -365,5 +365,138 @@ public class ProductServiceTest {
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidKeyWordMax);
         // Assert
         assertEquals("keywords", violations_invalid.iterator().next().getPropertyPath().toString());
+    }
+
+    @Test
+    public void testDescriptionEquivalencePartitionTitle() {
+        /*
+         * Valid Cases (TC14, TC15, TC16)
+         */
+
+        //Valid case Description == null char - TC14
+        Product productWithValidDescriptionNull = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidDescriptionNull);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidDescriptionNull)).thenReturn(productWithValidDescriptionNull);
+        Product savedProduct = productService.save(productWithValidDescriptionNull);
+        assertEquals(productWithValidDescriptionNull, savedProduct);
+
+        //Valid case Description == 50 char - TC15
+        String descriptionTC15 = "A".repeat(50);
+        Product productWithValidDescriptionMax = createProductSample(
+            1L,
+            "NES",
+            null,
+            descriptionTC15,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidDescriptionMax);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidDescriptionMax)).thenReturn(productWithValidDescriptionMax);
+        savedProduct = productService.save(productWithValidDescriptionMax);
+        assertEquals(productWithValidDescriptionMax, savedProduct);
+
+        //Valid case Description == 51 char - TC16
+        String descriptionTC16 = "A".repeat(51);
+        Product productWithValidDescriptionMaxOne = createProductSample(
+            1L,
+            "NES",
+            null,
+            descriptionTC16,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidDescriptionMaxOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidDescriptionMax)).thenReturn(productWithValidDescriptionMaxOne);
+        savedProduct = productService.save(productWithValidDescriptionMaxOne);
+        assertEquals(productWithValidDescriptionMaxOne, savedProduct);
+
+        /*
+         * Invalid Cases (TC17, TC18, TC19, TC20)
+         */
+        // Invalid case Description = 1 - TC17
+        Product productWithInvalidDescriptionMin = createProductSample(
+            1L,
+            "NES",
+            null,
+            "A",
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidDescriptionMin);
+        // Assert
+        assertEquals("description", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case Description = 2 - TC18
+        Product productWithInvalidDescriptionMinOne = createProductSample(
+            1L,
+            "NES",
+            null,
+            "AA",
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithInvalidDescriptionMinOne);
+        // Assert
+        assertEquals("description", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case Description = 49 - TC19
+        String descriptionTC19 = "A".repeat(49);
+        Product productWithInvalidDescriptioMaxOne = createProductSample(
+            1L,
+            "NES",
+            null,
+            descriptionTC19,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithInvalidDescriptioMaxOne);
+        // Assert
+        assertEquals("description", violations_invalid.iterator().next().getPropertyPath().toString());
     }
 }
