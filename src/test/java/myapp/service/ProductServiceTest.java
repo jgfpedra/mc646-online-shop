@@ -51,7 +51,8 @@ public class ProductServiceTest {
         BigDecimal price,
         ProductStatus status,
         Double weight,
-        Instant dateAdded
+        Instant dateAdded,
+        Instant dateModified
     ) {
         Product product = new Product()
             .id(id)
@@ -64,7 +65,8 @@ public class ProductServiceTest {
             .price(price)
             .status(status)
             .weight(weight)
-            .dateAdded(dateAdded);
+            .dateAdded(dateAdded)
+            .dateModified(dateModified);
 
         return product;
     }
@@ -87,7 +89,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidTitleMin);
         // Assert
@@ -109,7 +112,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidTitleMinOne);
         // Assert
@@ -132,7 +136,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidTitleMaxOne);
         // Assert
@@ -155,7 +160,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidTitleMax);
         // Assert
@@ -180,7 +186,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithTwoCharTitle);
         // Assert
@@ -199,7 +206,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithOneHundredOneCharTitle);
         // Assert
@@ -217,7 +225,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithNullCharTitle);
         // Assert
@@ -244,7 +253,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidKeyWordNull);
         // Assert
@@ -266,7 +276,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidKeyWordMin);
         // Assert
@@ -288,7 +299,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidKeyWordMinOne);
         // Assert
@@ -311,7 +323,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidKeyWordMaxOne);
         // Assert
@@ -334,7 +347,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidKeyWordMax);
         // Assert
@@ -360,7 +374,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidKeyWordMax);
         // Assert
@@ -385,7 +400,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidDescriptionNull);
         // Assert
@@ -408,7 +424,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidDescriptionMax);
         // Assert
@@ -431,7 +448,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidDescriptionMaxOne);
         // Assert
@@ -456,7 +474,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidDescriptionMin);
         // Assert
@@ -474,7 +493,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithInvalidDescriptionMinOne);
         // Assert
@@ -493,7 +513,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithInvalidDescriptioMaxOne);
         // Assert
@@ -518,7 +539,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidRatingNull);
         // Assert
@@ -540,7 +562,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidRatingMin);
         // Assert
@@ -562,7 +585,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidRatingMinOne);
         // Assert
@@ -584,7 +608,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidRatingMaxOne);
         // Assert
@@ -606,7 +631,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidRatingMax);
         // Assert
@@ -631,7 +657,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidRatingMin);
         // Assert
@@ -649,7 +676,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithInvalidRatingMax);
         // Assert
@@ -667,7 +695,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithInvalidRatingFloat);
         // Assert
@@ -693,7 +722,8 @@ public class ProductServiceTest {
             priceTC28,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidPriceMin);
         // Assert
@@ -716,7 +746,8 @@ public class ProductServiceTest {
             priceTC29,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidPriceMinOne);
         // Assert
@@ -739,7 +770,8 @@ public class ProductServiceTest {
             priceTC30,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidPriceMaxOne);
         // Assert
@@ -762,7 +794,8 @@ public class ProductServiceTest {
             priceTC31,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidPriceMax);
         // Assert
@@ -787,7 +820,8 @@ public class ProductServiceTest {
             null,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidPriceNull);
         // Assert
@@ -806,7 +840,8 @@ public class ProductServiceTest {
             priceTC33,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithInvalidPriceMin);
         // Assert
@@ -825,7 +860,8 @@ public class ProductServiceTest {
             priceTC34,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithInvalidPriceMax);
         // Assert
@@ -844,7 +880,8 @@ public class ProductServiceTest {
             priceTC35,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithInvalidPriceNegative);
         // Assert
@@ -863,7 +900,8 @@ public class ProductServiceTest {
             priceTC36,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithInvalidPriceString);
         // Assert
@@ -887,7 +925,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidQuantityMin);
         // Assert
@@ -909,7 +948,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidQuantityMinOne);
         // Assert
@@ -934,7 +974,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidQuantityNull);
         // Assert
@@ -952,7 +993,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidQuantityNegative);
         // Assert
@@ -970,7 +1012,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidQuantityFloat);
         // Assert
@@ -994,7 +1037,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidStatusInStock);
         // Assert
@@ -1016,7 +1060,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.PREORDER,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidStatusPreOrder);
         // Assert
@@ -1038,7 +1083,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.DISCONTINUED,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidStatusDiscontinued);
         // Assert
@@ -1060,7 +1106,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.OUT_OF_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidStatusOutOfStock);
         // Assert
@@ -1085,7 +1132,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             null,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidStatusNull);
         // Assert
@@ -1103,7 +1151,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.AVAILABLE,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithInvalidStatusAvailable);
         // Assert
@@ -1127,7 +1176,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidWeightNull);
         // Assert
@@ -1149,7 +1199,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             0.00,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidWeightMin);
         // Assert
@@ -1171,7 +1222,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             0.01,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidWeightMinOne);
         // Assert
@@ -1196,7 +1248,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             -0.01,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidWeightNegative);
         // Assert
@@ -1214,7 +1267,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             "10 gramas",
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_invalid = validator.validate(productWithInvalidWeightString);
         // Assert
@@ -1238,7 +1292,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidDimensionsNull);
         // Assert
@@ -1260,7 +1315,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidDimensionsMin);
         // Assert
@@ -1282,7 +1338,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidDimensionsMinOne);
         // Assert
@@ -1305,7 +1362,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidDimensionsMinOne);
         // Assert
@@ -1328,7 +1386,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         violations_valid = validator.validate(productWithValidDimensionsMax);
         // Assert
@@ -1354,7 +1413,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            Instant.now()
+            Instant.now(),
+            null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidDimensionsMax);
         // Assert
@@ -1380,7 +1440,8 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            instantDateTC59
+            instantDateTC59,
+            null
         );
         Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidDateAdded);
         // Assert
@@ -1405,6 +1466,7 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
+            null,
             null
         );
         Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidDateAddedNull);
@@ -1425,10 +1487,90 @@ public class ProductServiceTest {
             BigDecimal.TEN,
             ProductStatus.IN_STOCK,
             null,
-            instantDateTC61
+            instantDateTC61,
+            null
         );
         violations_invalid = validator.validate(productWithInvalidDateAddedWrong);
         // Assert
         assertEquals("dateAdded", violations_invalid.iterator().next().getPropertyPath().toString());
+    }
+
+    @Test
+    public void testDateModifiedEquivalencePartitionTitle() {
+        /*
+         * Valid Cases (TC62, TC63)
+         */
+
+        //Valid case dateAdded == null Instant - TC62
+        Product productWithValidModifiedDateNull = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now(),
+            null
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidModifiedDateNull);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidModifiedDateNull)).thenReturn(productWithValidModifiedDateNull);
+        Product savedProduct = productService.save(productWithValidModifiedDateNull);
+        assertEquals(productWithValidModifiedDateNull, savedProduct);
+
+        //Valid case dateAdded == 13/12/2024 Instant - TC63
+        LocalDate date = LocalDate.of(2024, 12, 13);
+        Instant instantDateTC63 = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        Product productWithValidModifiedDate = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now(),
+            instantDateTC63
+        );
+        violations_valid = validator.validate(productWithValidModifiedDate);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidModifiedDate)).thenReturn(productWithValidModifiedDate);
+        savedProduct = productService.save(productWithValidModifiedDate);
+        assertEquals(productWithValidModifiedDate, savedProduct);
+
+        /*
+         * Invalid Cases (TC64)
+         */
+        //Invalid case dateAdded == 10/13/2025 Instant - TC64
+        LocalDate date = LocalDate.of(2025, 13, 10);
+        Instant instantDateTC64 = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        Product productWithInvalidModifiedDateWrong = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now(),
+            instantDateTC64
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidModifiedDateWrong);
+        // Assert
+        assertEquals("dateModified", violations_invalid.iterator().next().getPropertyPath().toString());
     }
 }
