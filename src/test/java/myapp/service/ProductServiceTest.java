@@ -499,4 +499,178 @@ public class ProductServiceTest {
         // Assert
         assertEquals("description", violations_invalid.iterator().next().getPropertyPath().toString());
     }
+
+    @Test
+    public void testRatingEquivalencePartitionTitle() {
+        /*
+         * Valid Cases (TC20, TC21, TC22, TC23, TC24)
+         */
+
+        //Valid case Rating == null int - TC20
+        Product productWithValidRatingNull = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            null,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidRatingNull);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidRatingNull)).thenReturn(productWithValidRatingNull);
+        Product savedProduct = productService.save(productWithValidRatingNull);
+        assertEquals(productWithValidRatingNull, savedProduct);
+
+        //Valid case Rating == 1 int - TC21
+        Product productWithValidRatingMin = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidRatingMin);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidRatingMin)).thenReturn(productWithValidRatingMin);
+        savedProduct = productService.save(productWithValidRatingMin);
+        assertEquals(productWithValidRatingMin, savedProduct);
+
+        //Valid case Rating == 2 int - TC22
+        Product productWithValidRatingMinOne = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            2,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidRatingMinOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidRatingMinOne)).thenReturn(productWithValidRatingMinOne);
+        savedProduct = productService.save(productWithValidRatingMinOne);
+        assertEquals(productWithValidRatingMinOne, savedProduct);
+
+        //Valid case Rating == 9 int - TC23
+        Product productWithValidRatingMaxOne = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            9,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidRatingMaxOne);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidRatingMaxOne)).thenReturn(productWithValidRatingMaxOne);
+        savedProduct = productService.save(productWithValidRatingMaxOne);
+        assertEquals(productWithValidRatingMaxOne, savedProduct);
+
+        //Valid case Rating == 10 int - TC24
+        Product productWithValidRatingMax = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            10,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_valid = validator.validate(productWithValidRatingMax);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidRatingMax)).thenReturn(productWithValidRatingMax);
+        savedProduct = productService.save(productWithValidRatingMax);
+        assertEquals(productWithValidRatingMax, savedProduct);
+
+        /*
+         * Invalid Cases (TC25, TC26, TC27)
+         */
+        // Invalid case Rating = 0 int - TC25
+        Product productWithInvalidRatingMin = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            0,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidRatingMin);
+        // Assert
+        assertEquals("rating", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case Rating = 11 int - TC26
+        Product productWithInvalidRatingMax = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            11,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithInvalidRatingMax);
+        // Assert
+        assertEquals("rating", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        // Invalid case Rating = 1.11 int - TC27
+        Product productWithInvalidRatingFloat = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1.11,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            Instant.now()
+        );
+        violations_invalid = validator.validate(productWithInvalidRatingFloat);
+        // Assert
+        assertEquals("rating", violations_invalid.iterator().next().getPropertyPath().toString());
+    }
 }
