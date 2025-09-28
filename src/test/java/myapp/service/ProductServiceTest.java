@@ -1360,4 +1360,75 @@ public class ProductServiceTest {
         // Assert
         assertEquals("dimensions", violations_invalid.iterator().next().getPropertyPath().toString());
     }
+
+    @Test
+    public void testDateAddedEquivalencePartitionTitle() {
+        /*
+         * Valid Cases (TC59)
+         */
+        //Valid case dateAdded == 25/02/2025 Instant - TC59
+        LocalDate date = LocalDate.of(2025, 2, 25);
+        Instant instantDateTC59 = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        Product productWithValidDateAdded = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            instantDateTC59
+        );
+        Set<ConstraintViolation<Product>> violations_valid = validator.validate(productWithValidDateAdded);
+        // Assert
+        System.err.println(violations_valid);
+        assertTrue(violations_valid.isEmpty());
+        when(productRepository.save(productWithValidDateAdded)).thenReturn(productWithValidDateAdded);
+        Product savedProduct = productService.save(productWithValidDateAdded);
+        assertEquals(productWithValidDateAdded, savedProduct);
+
+        /*
+         * Invalid Cases (TC60, TC61)
+         */
+        //Invalid case dateAdded == null Instant - TC60
+        Product productWithInvalidDateAddedNull = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            null
+        );
+        Set<ConstraintViolation<Product>> violations_invalid = validator.validate(productWithInvalidDateAddedNull);
+        // Assert
+        assertEquals("dateAdded", violations_invalid.iterator().next().getPropertyPath().toString());
+
+        //Invalid case dateAdded == 30/02/2025 Instant Instant - TC61
+        LocalDate date = LocalDate.of(2025, 2, 30);
+        Instant instantDateTC61 = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        Product productWithInvalidDateAddedWrong = createProductSample(
+            1L,
+            "NES",
+            null,
+            null,
+            1,
+            1,
+            null,
+            BigDecimal.TEN,
+            ProductStatus.IN_STOCK,
+            null,
+            instantDateTC61
+        );
+        violations_invalid = validator.validate(productWithInvalidDateAddedWrong);
+        // Assert
+        assertEquals("dateAdded", violations_invalid.iterator().next().getPropertyPath().toString());
+    }
 }
